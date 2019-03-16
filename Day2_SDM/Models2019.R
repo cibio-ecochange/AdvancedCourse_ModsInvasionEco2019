@@ -117,15 +117,16 @@ plot(myBiomodData_Ad)
 ### Models' Calibration ###
 myBiomodModelOut_Ad <- BIOMOD_Modeling( 
                            myBiomodData_Ad, 
-                           models = c('GLM','GAM','GBM','CTA','ANN','SRE','FDA','MARS','RF', "MAXENT.Tsuruoka"), 
-                           models.options = NULL, 
-                           NbRunEval=3, 
-                           DataSplit=80, 
-                           Yweights=NULL, 
-                           VarImport=5, 
+                           models = c('GLM','GAM','GBM','CTA','ANN','SRE',
+                                      'FDA','MARS','RF', "MAXENT.Tsuruoka"), 
+                           NbRunEval = 3, 
+                           DataSplit = 80, 
+                           Yweights = NULL, 
+                           VarImport = 5, 
                            models.eval.meth = c('ROC'),
                            SaveObj = TRUE,
-                           rescal.all.models = TRUE)
+                           rescal.all.models = TRUE,
+                           models.options = BIOMOD_ModelingOptions(GAM=list(k=2)))
 
 ## summary of the model results
 myBiomodModelOut_Ad
@@ -138,7 +139,8 @@ myBiomodModelEval_Ad <- get_evaluations(myBiomodModelOut_Ad)
 myBiomodModelEval_Ad["ROC","Testing.data",,,]
 
 # checking variables' importance 
-getModelsVarImport(myBiomodModelOut_Ad)
+get_variables_importance(myBiomodModelOut_Ad)
+
 
 #######################################################################
 ## ENSEMBLE MODELLING
@@ -262,7 +264,7 @@ load("acadea/proj_acadea_2020/proj_acadea_2020_acadea_ensemble_ROCbin.RData")
 #######################################
 
 ## get data
-rusacu <- read.table ("rusacu.txt", h=T, sep="\t")
+rusacu <- read.table ("./DATA/rusacu.txt", h=T, sep="\t")
 
 
 ## separating the response data, coordinates and predictors
@@ -297,12 +299,13 @@ plot(myBiomodData_Ra)
 ### Models' Calibration ###
 myBiomodModelOut_Ra <- BIOMOD_Modeling( 
                            myBiomodData_Ra, 
-                           models = c('GLM','GAM','GBM','CTA','ANN','SRE','FDA','MARS','RF', "MAXENT.Tsuruoka"), 
+                           models = c('GLM','GAM','GBM','CTA','ANN','SRE','FDA',
+                                      'MARS','RF', "MAXENT.Tsuruoka"), 
                            models.options = NULL, 
-                           NbRunEval=3, 
-                           DataSplit=80, 
-                           Yweights=NULL, 
-                           VarImport=5, 
+                           NbRunEval = 3, 
+                           DataSplit = 80, 
+                           Yweights = NULL, 
+                           VarImport = 5, 
                            models.eval.meth = c('ROC'),
                            SaveObj = TRUE,
                            rescal.all.models = TRUE)
@@ -317,7 +320,7 @@ myBiomodModelEval_Ra <- get_evaluations(myBiomodModelOut_Ra)
 myBiomodModelEval_Ra["ROC","Testing.data",,,]
 
 # checking variables' importance 
-getModelsVarImport(myBiomodModelOut_Ra)
+get_variables_importance(myBiomodModelOut_Ra)
 
 #######################################################################
 ## ENSEMBLE MODELLING
@@ -511,7 +514,7 @@ RaBiomodRangeSize$Compt.By.Models
 load("acadea/proj_acadea_2020/proj_acadea_2020_acadea_ensemble_ROCbin.RData")
 load("acadea/proj_acadea_2000/proj_acadea_2000_acadea_ensemble_ROCbin.RData")
 
-totalareaAd<-read.table("./DATA/spatAd.txt", sep="\t", h=T)
+totalareaAd <- read.table("./DATA/spatAd.txt", sep="\t", h=T)
 
 proj.cur.acadea.mean.auc.xy <- data.frame(totalareaAd[,1:3], AcadeaBinAUC= proj_acadea_2000_acadea_ensemble_ROCbin[,"acadea_EMmeanByROC_mergedAlgo_mergedRun_mergedData"])
 
@@ -523,7 +526,7 @@ proj.fut.acadea.mean.auc.xy <- data.frame(totalareaAd[,1:3], AcadeaBinAUC= proj_
 load("rusacu/proj_rusacu_2020/proj_rusacu_2020_rusacu_ensemble_ROCbin.RData")
 load("rusacu/proj_rusacu_2000/proj_rusacu_2000_rusacu_ensemble_ROCbin.RData")
 
-totalareaRa<-read.table("./DATA/spatRa.txt", sep="\t", h=T)
+totalareaRa <- read.table("./DATA/spatRa.txt", sep="\t", h=T)
 
 proj.cur.rusacu.mean.auc.xy <- data.frame(totalareaRa[,1:3], RusacuBinAUC= proj_rusacu_2000_rusacu_ensemble_ROCbin[,"rusacu_EMmeanByROC_mergedAlgo_mergedRun_mergedData"])
 
@@ -550,16 +553,16 @@ level.plot (conflict.cur[,(4)], totalareaRa[,2:3], title = "Current conflict")
 # value -2 - only Acacia dealbata present
 
 
-Only.Acacia.cur<-sum(conflict.cur==-2)
+Only.Acacia.cur <- sum(conflict.cur==-2)
 Only.Acacia.cur
 
-Only.Ruscus.cur<-sum(conflict.cur==1)
+Only.Ruscus.cur <- sum(conflict.cur==1)
 Only.Ruscus.cur
 
-Acacia.Ruscus.cur <-sum(conflict.cur==-1)
+Acacia.Ruscus.cur <- sum(conflict.cur==-1)
 Acacia.Ruscus.cur
 
-No.species.cur<-sum(conflict.cur==-0)
+No.species.cur <- sum(conflict.cur==-0)
 No.species.cur
 
 
@@ -569,16 +572,16 @@ conflict.fut <- data.frame(df.merge.conf.fut[,1:3], conflict.fut = as.vector(df.
 
 level.plot (conflict.fut[,(4)], totalareaRa[,2:3], title = "Future conflict")
 
-Only.Acacia.fut<-sum(conflict.fut==-2)
+Only.Acacia.fut <- sum(conflict.fut==-2)
 Only.Acacia.fut
 
-Only.Ruscus.fut<-sum(conflict.fut==1)
+Only.Ruscus.fut <- sum(conflict.fut==1)
 Only.Ruscus.fut
 
-Acacia.Ruscus.fut <-sum(conflict.fut==-1)
+Acacia.Ruscus.fut <- sum(conflict.fut==-1)
 Acacia.Ruscus.fut
 
-No.species.fut<-sum(conflict.fut==-0)
+No.species.fut <- sum(conflict.fut==-0)
 No.species.fut
 
 
