@@ -83,7 +83,7 @@ _SegOptim_ uses three main input layers described in the figure below.
 ![ SegOptim package inputs and outputs](./_img/soptim_in_out.png)
 
 
-A bried description of _SegOptim_ package inputs:
+A brief description of _SegOptim_ package inputs:
 
 
 - __Training data__: typically a single-layer raster dataset containing samples for 
@@ -104,16 +104,10 @@ get the classification rules.
 Use R help system to get more info on _SegOptim_ functions.
 
 
-
-# Now, let's code!
-
---------------------------------------------------------------------------------------
-
-
-
 ## Inputs
 
 --------------------------------------------------------------------------------------
+
 
 First, define the correct working directory according to your own settings (change what is inside the ""): 
 
@@ -122,6 +116,7 @@ First, define the correct working directory according to your own settings (chan
 setwd("D:/MyDocs/R-dev/ECOCHANGE/AdvancedCourse_ModsInvasionEco2019/Day1_RemoteSensing_UAVs")
 
 ```
+
 
 Now load the libraries and define the data inputs:
 
@@ -152,6 +147,29 @@ otbPath <- "C:/OTB/bin"
 ```
 
 
+Let's check if the files and folders actually exist! 
+
+```{r Check data paths}
+
+if(!file.exists(inputSegFeat.path))
+  print("Could not find data for image segmentation!")
+
+if(!file.exists(trainData.path))
+  print("Could not find training data!")
+
+if(!(file.exists(classificationFeatures.path[1]) | file.exists(classificationFeatures.path[2])))
+  print("Could not find data for classification!")
+
+if(!dir.exists(otbPath))
+  print("Could not find Orfeo Toolbox binaries!")
+
+```
+
+
+All OK if you don't see any message!! Otherwise, if you receive a warning from the above code chunk 
+you have to correct your data paths...
+
+
 ## Outputs
 
 --------------------------------------------------------------------------------------
@@ -174,11 +192,16 @@ outClassRst.path <- "WV2_VilarVeiga_AcaciaSpp.tif"
 --------------------------------------------------------------------------------------
 
 This section will use _SegOptim_ interface functions to run OTB's Large Scale Mean Shift (LSMS) 
-image segmentation algorithm. Segmentation involves the partitioning of an image into a set of 
-jointly exhaustive and mutually disjoint regions (a.k.a. segments, composed by multiple image 
-pixels), that are internally more homogeneous and similar, compared to adjacent ones. Image segments 
-are then related to geographic objects of interest (e.g., forests, agricultural or urban areas) 
-through some form of object-based classification (the following step in this exercise).
+image segmentation algorithm. 
+
+Segmentation involves the partitioning of an image into a set of jointly exhaustive and mutually 
+disjoint regions (a.k.a. segments, composed by multiple image pixels), that are internally more 
+homogeneous and similar, compared to adjacent ones. 
+
+Image segments are then related to geographic objects of interest (e.g., forests, agricultural 
+or urban areas) through some form of object-based classification (the following step in this 
+exercise).
+         
             
 ```{r Run image segmentation, message=FALSE, warning=FALSE}
 
