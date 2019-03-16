@@ -1,9 +1,8 @@
 
 ## ------------------------------------------------------------------------------------------------------------------- 
 ##
-## NNEXT Training School 
-## COST Action FP1403 | CIBIO/InBIO | Modelling landscape invasion by non-native trees: challenges and applications
-## 25-29 September 2017 – Porto, Portugal
+## CIBIO-InBIO Advanced Course - Models in Invasion Ecology 2019
+## 18 - 20 March 2019 – Vairão, V. Conde, Portugal
 ##
 ## -------------------------------------------------------------------------------------------------------------------
 

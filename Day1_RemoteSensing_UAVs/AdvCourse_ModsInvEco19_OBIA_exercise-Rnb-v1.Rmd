@@ -12,19 +12,11 @@ output:
 --------------------------------------------------------------------------------------
 
 In this exercise we are going to map areas invaded by _Acacia dealbata_ in __Vilar da Veiga__, 
-a mountainous area located in Peneda-Ger?s National Park, NW Portugal. Total precipitation 
-amounts to 1300 mm/year and mean annual temperature to 13 ?C, with large amplitude in mean 
-annual values between cold and warm seasons (-10 to 35 ?C). Elevation ranges from 145 to 1253m 
+a mountainous area located in Peneda-Gerês National Park, NW Portugal. Total precipitation 
+in the are amounts to 1300 mm/year and mean annual temperature to 13 C, with large amplitude in mean 
+annual values between cold and warm seasons (-10 to 35 C). Elevation ranges from 145 to 1253m 
 with steep slopes.                  
-
-Scrub and deciduous oak forests developed on granite bedrock and are the main vegetation types, 
-as a follow-up of the abandonment of extensive husbandry. Pine forests are also another relevant 
-vegetation type, especially on common land. Agricultural areas occupy a small and decreasing 
-extent at lower altitudes.              
-
-_A. dealbata_ was locally introduced by forestry services to stabilize slopes around the start 
-of the XX^th^ century. However, due to management practices, abandonment and wildfires in the 
-region, it has become widespread throughout the landscape.                 
+                
           
       
 ![Acacia dealbata picture](./_img/acacia_dealbata.jpg)
@@ -72,15 +64,19 @@ An Object-based Image Analysis (OBIA) approach will be employed in this exercise
 is presented in the figure below. 
 
 
-![Exercise workflow](./_img/COST_Action_WorkFlow_RS_OBIA_exercise-v1.png)
+![Exercise workflow](./_img/workflow_RS_OBIA_exercise-v1.png)
 
 
-To map the target species we will use _SegOptim_ - a R package developed in PRECOL team 
-(still in beta!...) used to perform object-based analyses of EO data. _SegOptim_ allows 
-to interface multiple GIS/RS analysis software, such as Orfeo Toolbox (OTB), GRASS, SAGA, 
-etc. and use them to perform image segmentation. Using the segmented image, we can then run 
-supervised classification, which allows combining field or digitized training data with spectral 
-image features to obtain maps with the distribution of target species or land cover types. 
+To map the target species we will use _SegOptim_ - a R package developed in ECOCHANGE team  
+used to perform object-based analyses of EO data. _SegOptim_ allows to interface multiple 
+GIS/RS analysis software, such as Orfeo Toolbox (OTB), GRASS, SAGA, etc. and use them to 
+perform image segmentation. 
+
+Using the segmented image, we can then run supervised classification, which allows combining 
+field or digitized training data with spectral image features to obtain maps with the actual 
+distribution of target species. 
+
+
 _SegOptim_ uses three main input layers described in the figure below.
 
 
@@ -89,20 +85,21 @@ _SegOptim_ uses three main input layers described in the figure below.
 
 A bried description of _SegOptim_ package inputs:
 
+
 - __Training data__: typically a single-layer raster dataset containing samples for 
-training a classifier. The input format can be of any type included in the `raster` 
-package via `rgdal` ([link](http://www.gdal.org/formats_list.html)).
+training a classifier.
+
 
 - __Segmentation features__: typically a multi-layer raster dataset with features used only 
 for the segmentation stage (e.g., spectral bands, spectral indices, texture). This data will 
 be used by the segmentation algorithm to group similar neighboring pixels into objects 
 (or 'super-pixels').
 
+
 - __Classification features__: also a multi-layer raster dataset with features used 
-for classification (e.g., spectral bands and indices, texture, elevation, slope). The input 
-format can be of any type included in the `raster` package via `rgdal` 
-([link](http://www.gdal.org/formats_list.html)). This will allow the classification algorithm 
-to extract/learn the spectral profile and get the classification rules.
+for classification (e.g., spectral bands and indices, texture, elevation, slope). 
+This will allow the classification algorithm to extract/learn the spectral profile and 
+get the classification rules.
 
 Use R help system to get more info on _SegOptim_ functions.
 
@@ -113,32 +110,20 @@ Use R help system to get more info on _SegOptim_ functions.
 --------------------------------------------------------------------------------------
 
 
-![](./_img/info.png)
-
-__IMPORTANT NOTE__:           
-            
-Before beginning, start by copying the dropbox folder in __NNEXT_TS_materials/Practicals materials/Remote_Sensing_Exercises__ to your local file system. Otherwise, changes in these files 
-will be passed to other trainees :-o
-
 
 ## Inputs
 
 --------------------------------------------------------------------------------------
 
-Change the paths in the following code section according to your system but keeping the 
-terminations/file name. These are are inputs and outputs
+First, define the correct working directory according to your own settings (change what is inside the ""): 
 
-For example:        
+```{r Set work dir, message=FALSE, warning=FALSE}
 
-"D:/MyDocs/temp/TrainingSchool/SEGM_FEAT/WV2_b532_VilarVeiga_smallTestSite.tif"      
+setwd("D:/MyDocs/R-dev/ECOCHANGE/AdvancedCourse_ModsInvasionEco2019/Day1_RemoteSensing_UAVs")
 
-to -->      
+```
 
-"/Users/myName/NN_COST_TS/SEGM_FEAT/WV2_b532_VilarVeiga_smallTestSite.tif"        
-          
-Then, run the code chunk by clicking the play button (green triangle). This will store file paths 
-in R memory.
-
+Now load the libraries and define the data inputs:
 
 ```{r Set raster inputs and load packages, message=FALSE, warning=FALSE}
 
@@ -148,54 +133,38 @@ library(SegOptim)
 
 # Path to raster data used for image segmentation
 # In SEGM_FEAT directory
-inputSegFeat.path <- "D:/MyDocs/temp/TrainingSchool/SEGM_FEAT/WV2_b532_VilarVeiga_smallTestSite.tif"
+inputSegFeat.path <- "./SEGM_FEAT/WV2_b532_VilarVeiga_smallTestSite.tif"
 
 # Path to training raster data
 # [0] Non-invaded areas [1] Acacia dealbata invaded areas
 # In TRAIN_AREAS directory
-trainData.path <- "D:/MyDocs/temp/TrainingSchool/TRAIN_AREAS/trainAreas_Adealbata_VVeiga_WV2_v1.tif"
+trainData.path <- "./TRAIN_AREAS/trainAreas_Adealbata_VVeiga_WV2_v1.tif"
 
 # Path to raster data used as classification features
 # In CLASSIF_FEAT directory
 classificationFeatures.path <- 
-  c("D:/MyDocs/temp/TrainingSchool/CLASSIF_FEAT/WV2_NDIcombns_VilarVeiga_smallTestSite.tif",
-    "D:/MyDocs/temp/TrainingSchool/CLASSIF_FEAT/WV2_VilarVeiga_smallTestSite.tif")
+  c("./CLASSIF_FEAT/WV2_NDIcombns_VilarVeiga_smallTestSite.tif",
+    "./CLASSIF_FEAT/WV2_VilarVeiga_smallTestSite.tif")
 
 # Path to Orfeo Toolbox binaries 
 otbPath <- "C:/OTB/bin"
 
-# Check if the files and folders exist! 
-if(!file.exists(inputSegFeat.path))
-  print("Could not find data for image segmentation!")
-
-if(!file.exists(trainData.path))
-  print("Could not find training data!")
-
-if(!(file.exists(classificationFeatures.path[1]) | file.exists(classificationFeatures.path[2])))
-  print("Could not find data for classification!")
-
-if(!dir.exists(otbPath))
-  print("Could not find Orfeo Toolbox binaries!")
-
 ```
-
-If you receive a message from the above code chunk you have to correct your data paths.
 
 
 ## Outputs
 
 --------------------------------------------------------------------------------------
 
-Also change these paths according to your file system and working directory. In this case you can change
-the output file names. Click play. 
+Now, let´s define the ouput files generated by the analyses:
 
 ```{r Set raster outputs}    
 
 ## Output file from OTB image segmentation     
-outSegmRst.path <- "D:/MyDocs/temp/TrainingSchool/segmRaster.tif"
+outSegmRst.path <- "segmRaster.tif"
 
 # The final output file containing the distribution of the target species
-outClassRst.path <- "D:/MyDocs/temp/TrainingSchool/WV2_VilarVeiga_AcaciaSpp_v1.tif"
+outClassRst.path <- "WV2_VilarVeiga_AcaciaSpp.tif"
 
 ```
 
@@ -210,18 +179,6 @@ jointly exhaustive and mutually disjoint regions (a.k.a. segments, composed by m
 pixels), that are internally more homogeneous and similar, compared to adjacent ones. Image segments 
 are then related to geographic objects of interest (e.g., forests, agricultural or urban areas) 
 through some form of object-based classification (the following step in this exercise).
-         
-Mean shift algorithm was firstly proposed by Fukunaga and Hostetler (1975) as a non-parametric 
-density estimation algorithm that converges rapidly on the local maximum of a probability 
-density function through iterations. It was successfully applied to image segmentation by 
-Comaniciu and Meer (1999), with the advantage of not requiring prior knowledge of the number 
-of clusters and not constraining the shape of the clusters. The implementation in OTB, extends 
-the mean-shift algorithm so it can handle large images. Go to: [link](https://goo.gl/DHp5rh) for 
-more details on mean-shift or read the paper on LSMS:      
-         
-Michel, J. et al. (2015). _Stable Mean-Shift Algorithm and Its Application to the Segmentation of 
-Arbitrarily Large Remote Sensing Images_. IEEE Transactions on Geoscience and Remote Sensing 
-(53-2:952-964).       
             
 ```{r Run image segmentation, message=FALSE, warning=FALSE}
 
@@ -254,13 +211,7 @@ plot(segmRst)
 
 
 You can use a GIS software to better inspect and visualize the output segmented raster. 
-Notice that each segment is indexed by an integer number.      
-
-__NOTE__:    
-Image segmentation parameters need proper tuning to obtain the best results out of object-based 
-analyses. This requires testing different parametrizations and values to find which values 
-fit the best to each case. _SegOptim_ (as the name suggests) allows to optimize these parameters! 
-However, that subject would require another session... ;-) 
+Notice that each segment is indexed by an integer number.
 
              
 ## Load train data and classification features
@@ -348,16 +299,20 @@ calData <- prepareCalData(rstSegm = segmRst,
 --------------------------------------------------------------------------------------
 
 We will use the training data in combination with satellite data (NDIs and original 
-spectral bands) to map the distribution of _A. dealbata_. The Random Forest (RF) 
-algorithm will be used for this purpose. RF are an ensemble learning method for 
+spectral bands) to map the distribution of _A. dealbata_. 
+
+The Random Forest (RF) algorithm will be used for this purpose. RF are an ensemble learning method for 
 classification, regression and other tasks, that operate by constructing multiple decision 
 trees during the training stage and outputting the class that is the mode of the classes 
 (classification) or the average prediction (regression) of the individual trees. This way, RF 
 correct for decision trees' habit of over-fitting to their training set.
 
 For evaluation purposes, we will employ 10 fold cross-validation (i.e., ten splits with 
-90% train / 10% test). Cohen's _Kappa_ was selected as the evaluation metric (although others 
-can be calculated later). A minimum of 30 total train cases were set, and in each train/test 
+90% train / 10% test). 
+
+Cohen's _Kappa_ was selected as the evaluation metric (although others can be calculated later). 
+
+A minimum of 30 total train cases were set, and in each train/test 
 split we set 10 for training and 5 for testing as the minimum. Notice that the _runFullCalibration_ 
 option must always be set to _TRUE_ (check help for more details).      
   
@@ -384,14 +339,24 @@ evalMatrix <- evalPerformanceClassifier(classifObj)
 
 print(round(evalMatrix,2))
 
-# Finally, predict the class label for the entire image (i.e., outside the training set)
-# and also save the classified image
+
+
+```
+
+
+Finally, predict the class label for the entire image (i.e., outside the training set) 
+and also save the classified image:
+
+```{r Predict segments}
+
 rstPredSegmRF <- predictSegments(classifierObj = classifObj, 
                                  calData = calData, 
                                  rstSegm = segmRst, 
                                  predictFor = "all", 
                                  filename = outClassRst.path)
 print(rstPredSegmRF)
+
+plot(rstPredSegmRF)
 
 ```
 
@@ -409,7 +374,6 @@ varImpPlot(classifObj$ClassObj$FULL)
 
 
 ```
-
 
 
 
