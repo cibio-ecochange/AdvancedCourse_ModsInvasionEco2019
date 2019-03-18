@@ -14,7 +14,7 @@ Repository of the Models in Invasion Ecology Advanced Course 2019
 
 - **Day1_RemoteSensing_UAVs** - Satellites and Unmanned Aerial Vehicles (UAVs) for detecting and modelling invasive species (João Gonçalves & Renato Henriques)
   
-- **Day2_SDM** - Species Distribution / Habitat Suitability Models session (Joana Vicente)
+- **Day2_SDM** - Species Distribution / Habitat Suitability Models session (Joana Vicente & João Gonçalves)
 
 - **Day2_MultivariateAnalysis** - Multivariate Analysis session (Ana Sofia Vaz)
 
