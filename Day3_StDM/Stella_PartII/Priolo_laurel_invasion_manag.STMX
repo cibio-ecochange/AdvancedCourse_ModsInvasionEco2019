@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xmile version="1.0" level="3" xmlns="http://www.systemdynamics.org/XMILE" xmlns:isee="http://iseesystems.com/XMILE">
+    <header>
+        <smile version="1.0" namespace="std, isee" />
+        <name>Priolo_laurel_invasion_manag</name>
+        <uuid>b9692f0b-6214-4b50-8a2f-bb5ff6ce5c4c</uuid>
+        <vendor>isee systems, inc.</vendor>
+        <product version="10.0.5" lang="en">STELLA</product>
+    </header>
+    <style>
+        <model font-family="Geneva" font-size="9" />
+        <interface font-family="Helvetica" font-size="9" />
+    </style>
+    <sim_specs method="Euler" time_units="Years">
+        <start>0</start>
+        <stop>50</stop>
+        <dt>1</dt>
+    </sim_specs>
+    <model_units />
+    <isee:prefs layer="model" grid_width="20" grid_height="50" divide_by_zero_alert="true" hide_taskbar="true" show_module_prefix="true">
+        <isee:window width="1265" height="741" />
+        <isee:security />
+        <isee:print_setup width="559" height="783" />
+    </isee:prefs>
+    <isee:equation_prefs order_by="module" />
+    <model>
+        <stock name="laurel">
+            <eqn>200000</eqn>
+            <inflow>laurel_regen</inflow>
+            <outflow>Laur_inv_degree_1</outflow>
+            <non_negative />
+            <display x="314" y="263" color="blue" label_side="center" />
+        </stock>
+        <stock name="laur_cl">
+            <eqn>100000</eqn>
+            <inflow>Laur_inv_degree_1</inflow>
+            <outflow>Laur_inv_degree_2</outflow>
+            <outflow>manag_laur_cl</outflow>
+            <non_negative />
+            <display x="504" y="269" color="blue" label_side="center" />
+        </stock>
+        <stock name="cl_laur">
+            <eqn>100000</eqn>
+            <inflow>Laur_inv_degree_2</inflow>
+            <outflow>Laur_inv_degree_3</outflow>
+            <outflow>manag_cl_laur</outflow>
+            <non_negative />
+            <display x="704" y="261" color="blue" label_side="center" />
+        </stock>
+        <stock name="cl">
+            <eqn>100000</eqn>
+            <inflow>Laur_inv_degree_3</inflow>
+            <outflow>manag_cl</outflow>
+            <non_negative />
+            <display x="914" y="263" color="blue" label_side="center" />
+        </stock>
+        <flow name="Laur_inv_degree_1">
+            <eqn>rate_cl_invasion_1*laurel</eqn>
+            <non_negative />
+            <display x="409" y="258" color="blue">
+                <pts>
+                    <pt x="336" y="258" />
+                    <pt x="482" y="258" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="Laur_inv_degree_2">
+            <eqn>rate_cl_invasion_2*laur_cl</eqn>
+            <non_negative />
+            <display x="604" y="257" color="blue">
+                <pts>
+                    <pt x="526" y="257" />
+                    <pt x="682" y="257" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="Laur_inv_degree_3">
+            <eqn>rate_cl_invasion_3*cl_laur</eqn>
+            <non_negative />
+            <display x="809" y="261" color="blue">
+                <pts>
+                    <pt x="726" y="261" />
+                    <pt x="892" y="261" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="rate_cl_invasion_1">
+            <eqn>0.001</eqn>
+            <display x="393" y="181" color="blue" />
+        </aux>
+        <aux name="rate_cl_invasion_2">
+            <eqn>0.002</eqn>
+            <display x="583" y="190" color="blue" />
+        </aux>
+        <aux name="rate_cl_invasion_3">
+            <eqn>0.004</eqn>
+            <display x="819" y="202" color="blue" />
+        </aux>
+        <flow name="manag_laur_cl">
+            <eqn>management*laur_cl</eqn>
+            <non_negative />
+            <display x="506" y="348" color="blue" label_angle="277">
+                <pts>
+                    <pt x="506" y="286" />
+                    <pt x="506" y="411" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="manag_cl_laur">
+            <eqn>management*cl_laur</eqn>
+            <non_negative />
+            <display x="700" y="343" color="blue" label_angle="277">
+                <pts>
+                    <pt x="700" y="278" />
+                    <pt x="700" y="409" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="manag_cl">
+            <eqn>management*cl</eqn>
+            <non_negative />
+            <display x="916" y="342" color="blue" label_angle="277">
+                <pts>
+                    <pt x="916" y="280" />
+                    <pt x="916" y="404" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="laurel_regen">
+            <eqn>manag_laur_cl+manag_cl_laur+manag_cl</eqn>
+            <non_negative />
+            <display x="255" y="262" color="blue">
+                <pts>
+                    <pt x="219" y="262" />
+                    <pt x="292" y="262" />
+                </pts>
+            </display>
+        </flow>
+        <stock name="LN_Priolo">
+            <eqn>0</eqn>
+            <inflow>gains</inflow>
+            <outflow>losses</outflow>
+            <outflow>adjust</outflow>
+            <non_negative />
+            <display x="1444" y="529" color="blue" />
+        </stock>
+        <flow name="gains">
+            <eqn>6.37E-01+(1.89E-07*laur_cl)+(1.29E-06*cl_laur)+(2.00E-06*laurel)  </eqn>
+            <non_negative />
+            <display x="1355" y="525" color="blue">
+                <pts>
+                    <pt x="1289" y="525" />
+                    <pt x="1422" y="525" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="losses">
+            <eqn>6.42E-08*cl</eqn>
+            <non_negative />
+            <display x="1541" y="526" color="blue">
+                <pts>
+                    <pt x="1466" y="526" />
+                    <pt x="1616" y="526" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="Priolo">
+            <eqn>IF LN_Priolo=0 then 0 else EXP(LN_Priolo) </eqn>
+            <display x="1444" y="405" color="blue" />
+        </aux>
+        <flow name="adjust">
+            <eqn>LN_Priolo</eqn>
+            <non_negative />
+            <display x="1444" y="599" color="blue" label_angle="277">
+                <pts>
+                    <pt x="1444" y="546" />
+                    <pt x="1444" y="653" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="total_area">
+            <eqn>cl+cl_laur+laur_cl+laurel</eqn>
+            <display x="680" y="625" color="blue" />
+        </aux>
+        <aux name="timing_manag">
+            <eqn>5</eqn>
+            <display x="156" y="590" color="blue" />
+        </aux>
+        <aux name="manag_effort">
+            <eqn>1</eqn>
+            <display x="156" y="525" color="blue" />
+        </aux>
+        <aux name="management_option">
+            <eqn>0</eqn>
+            <display x="223" y="625" color="blue" />
+        </aux>
+        <aux name="management">
+            <eqn>IF management_option = 1 AND TIME=timing_manag THEN manag_effort ELSE 0</eqn>
+            <display x="249" y="539" color="blue" />
+        </aux>
+        <display page_width="559" page_height="783" page_cols="4" page_rows="2" isee:converter_size="medium" isee:animate_flows="true" isee:animate_stocks="true" isee:animate_converters="true" interval="DT" scroll_x="536" scroll_y="192">
+            <alias x="146" y="271" uid="0">
+                <of>manag_laur_cl</of>
+            </alias>
+            <alias x="1203" y="527" uid="1">
+                <of>laur_cl</of>
+            </alias>
+            <alias x="427" y="355" uid="2">
+                <of>management</of>
+            </alias>
+            <alias x="175" y="315" uid="3">
+                <of>manag_cl_laur</of>
+            </alias>
+            <alias x="549" y="614" uid="4">
+                <of>cl_laur</of>
+            </alias>
+            <alias x="1590" y="451" uid="5">
+                <of>cl</of>
+            </alias>
+            <alias x="1315" y="438" uid="6">
+                <of>cl_laur</of>
+            </alias>
+            <alias x="726" y="744" uid="7">
+                <of>laurel</of>
+            </alias>
+            <alias x="634" y="542" uid="8">
+                <of>cl</of>
+            </alias>
+            <alias x="623" y="351" uid="9">
+                <of>management</of>
+            </alias>
+            <alias x="848" y="362" uid="10">
+                <of>management</of>
+            </alias>
+            <alias x="234" y="353" uid="11">
+                <of>manag_cl</of>
+            </alias>
+            <alias x="589" y="713" uid="12">
+                <of>laur_cl</of>
+            </alias>
+            <alias x="1309" y="628" uid="13">
+                <of>laurel</of>
+            </alias>
+            <connector x="611" y="699" uid="14" color="#FF007F">
+                <from>
+                    <alias uid="12" />
+                </from>
+                <to>total_area</to>
+            </connector>
+            <connector x="937" y="270" uid="15" color="#FF007F">
+                <from>cl</from>
+                <to>manag_cl</to>
+            </connector>
+            <connector x="229" y="618" uid="16" color="#FF007F">
+                <from>management_option</from>
+                <to>management</to>
+            </connector>
+            <connector x="1466" y="544" uid="17" color="#FF007F">
+                <from>LN_Priolo</from>
+                <to>adjust</to>
+            </connector>
+            <connector x="526" y="252" uid="18" color="#FF007F">
+                <from>laur_cl</from>
+                <to>Laur_inv_degree_2</to>
+            </connector>
+            <connector x="1331" y="615" uid="19" color="#FF007F">
+                <from>
+                    <alias uid="13" />
+                </from>
+                <to>gains</to>
+            </connector>
+            <connector x="571" y="615" uid="20" color="#FF007F">
+                <from>
+                    <alias uid="4" />
+                </from>
+                <to>total_area</to>
+            </connector>
+            <connector x="165" y="525" uid="21" color="#FF007F">
+                <from>manag_effort</from>
+                <to>management</to>
+            </connector>
+            <connector x="1225" y="542" uid="22" color="#FF007F">
+                <from>
+                    <alias uid="1" />
+                </from>
+                <to>gains</to>
+            </connector>
+            <connector x="183" y="311" uid="23" color="#FF007F">
+                <from>
+                    <alias uid="3" />
+                </from>
+                <to>laurel_regen</to>
+            </connector>
+            <connector x="714" y="278" uid="24" color="#FF007F">
+                <from>cl_laur</from>
+                <to>manag_cl_laur</to>
+            </connector>
+            <connector x="164" y="586" uid="25" color="#FF007F">
+                <from>timing_manag</from>
+                <to>management</to>
+            </connector>
+            <connector x="1589" y="468" uid="26" color="#FF007F">
+                <from>
+                    <alias uid="5" />
+                </from>
+                <to>losses</to>
+            </connector>
+            <connector x="719" y="727" uid="27" color="#FF007F">
+                <from>
+                    <alias uid="7" />
+                </from>
+                <to>total_area</to>
+            </connector>
+            <connector x="393" y="190" uid="28" color="#FF007F">
+                <from>rate_cl_invasion_1</from>
+                <to>Laur_inv_degree_1</to>
+            </connector>
+            <connector x="723" y="244" uid="29" color="#FF007F">
+                <from>cl_laur</from>
+                <to>Laur_inv_degree_3</to>
+            </connector>
+            <connector x="515" y="286" uid="30" color="#FF007F">
+                <from>laur_cl</from>
+                <to>manag_laur_cl</to>
+            </connector>
+            <connector x="816" y="211" uid="31" color="#FF007F">
+                <from>rate_cl_invasion_3</from>
+                <to>Laur_inv_degree_3</to>
+            </connector>
+            <connector x="427" y="346" uid="32" color="#FF007F">
+                <from>
+                    <alias uid="2" />
+                </from>
+                <to>manag_laur_cl</to>
+            </connector>
+            <connector x="851" y="353" uid="33" color="#FF007F">
+                <from>
+                    <alias uid="10" />
+                </from>
+                <to>manag_cl</to>
+            </connector>
+            <connector x="629" y="344" uid="34" color="#FF007F">
+                <from>
+                    <alias uid="9" />
+                </from>
+                <to>manag_cl_laur</to>
+            </connector>
+            <connector x="336" y="250" uid="35" color="#FF007F">
+                <from>laurel</from>
+                <to>Laur_inv_degree_1</to>
+            </connector>
+            <connector x="1305" y="455" uid="36" color="#FF007F">
+                <from>
+                    <alias uid="6" />
+                </from>
+                <to>gains</to>
+            </connector>
+            <connector x="1429" y="511" uid="37" color="#FF007F">
+                <from>LN_Priolo</from>
+                <to>Priolo</to>
+            </connector>
+            <connector x="585" y="199" uid="38" color="#FF007F">
+                <from>rate_cl_invasion_2</from>
+                <to>Laur_inv_degree_2</to>
+            </connector>
+            <connector x="647" y="559" uid="39" color="#FF007F">
+                <from>
+                    <alias uid="8" />
+                </from>
+                <to>total_area</to>
+            </connector>
+            <connector x="237" y="345" uid="40" color="#FF007F">
+                <from>
+                    <alias uid="11" />
+                </from>
+                <to>laurel_regen</to>
+            </connector>
+            <connector x="149" y="262" uid="41" color="#FF007F">
+                <from>
+                    <alias uid="0" />
+                </from>
+                <to>laurel_regen</to>
+            </connector>
+            <stacked_container height="282" width="492" uid="42">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="true" isee:use_five_segments="false" date_time="2019-03-21T10:42:21Z" time_precision="2" from="0" to="50">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
+                        <scale min="500000" max="500000" />
+                        <entity name="total_area" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1087" y="626" width="26" height="22" color="#008F44" label_side="bottom" label="total area" type="graph" icon_of="42" />
+            <stacked_container height="282" width="492" uid="43">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="true" isee:use_five_segments="false" date_time="2019-03-21T10:42:21Z" time_precision="2" from="0" to="50">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
+                        <entity name="laurel" />
+                    </plot>
+                    <plot index="1" pen_width="1" color="red" precision="1" show_y_axis="true">
+                        <entity name="laur_cl" />
+                    </plot>
+                    <plot index="2" pen_width="1" color="fuchsia" precision="1" show_y_axis="true">
+                        <entity name="cl_laur" />
+                    </plot>
+                    <plot index="3" pen_width="1" color="#008F44" precision="1" show_y_axis="true">
+                        <entity name="cl" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1008" y="621" width="26" height="22" color="#008F44" label_side="bottom" label="natural veg" type="graph" icon_of="43" />
+            <stacked_container height="282" width="492" uid="44">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="true" isee:use_five_segments="false" date_time="2019-03-21T10:42:21Z" time_precision="2" from="1" to="50">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="max" show_y_axis="true">
+                        <entity name="Priolo" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="996" y="544" width="26" height="22" color="#008F44" label_side="bottom" label="Priolo" type="graph" icon_of="44" />
+        </display>
+        <interface page_rows="2" page_width="788" page_height="528">
+            <simulation_delay>0.1</simulation_delay>
+            <switch x="177" y="315" uid="45" label_side="bottom" label_angle="225" color="black" width="32" height="60" switch_style="toggle" clicking_sound="true">
+                <entity name="management_option" value="1" />
+            </switch>
+            <knob x="182" y="120" color="black" width="83" height="91" min="0" max="500000">
+                <entity name="laurel" />
+            </knob>
+            <knob x="302" y="126" color="black" width="83" height="91" min="0" max="500000">
+                <entity name="laur_cl" />
+            </knob>
+            <knob x="426" y="120" color="black" width="83" height="91" min="0" max="500000">
+                <entity name="cl_laur" />
+            </knob>
+            <knob x="546" y="119" color="black" width="83" height="91" min="0" max="500000">
+                <entity name="cl" />
+            </knob>
+            <knob x="321" y="348" color="black" width="83" height="91" min="1" max="50">
+                <entity name="timing_manag" value="10" />
+            </knob>
+            <knob x="446" y="349" color="black" width="83" height="91" min="0" max="1">
+                <entity name="manag_effort" value="0.8" />
+            </knob>
+        </interface>
+        <popup x="547" y="246" content="42" />
+        <popup x="407" y="248" content="43" />
+        <popup x="561" y="261" content="44" />
+    </model>
+</xmile>

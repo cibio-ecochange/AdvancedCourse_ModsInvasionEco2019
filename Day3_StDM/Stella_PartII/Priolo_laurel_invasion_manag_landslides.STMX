@@ -1,0 +1,943 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xmile version="1.0" level="3" xmlns="http://www.systemdynamics.org/XMILE" xmlns:isee="http://iseesystems.com/XMILE">
+    <header>
+        <smile version="1.0" namespace="std, isee" />
+        <name>teste</name>
+        <uuid>b9692f0b-6214-4b50-8a2f-bb5ff6ce5c4c</uuid>
+        <vendor>isee systems, inc.</vendor>
+        <product version="10.0.5" lang="en">STELLA</product>
+    </header>
+    <style>
+        <model font-family="Geneva" font-size="9" />
+        <interface font-family="Helvetica" font-size="9" />
+    </style>
+    <sim_specs method="Euler" time_units="Years">
+        <start>0</start>
+        <stop>50</stop>
+        <dt>1</dt>
+    </sim_specs>
+    <model_units />
+    <isee:prefs layer="model" grid_width="20" grid_height="50" divide_by_zero_alert="true" hide_taskbar="true" show_module_prefix="true">
+        <isee:window width="1265" height="741" />
+        <isee:security />
+        <isee:print_setup width="559" height="783" />
+    </isee:prefs>
+    <isee:equation_prefs order_by="module" />
+    <model>
+        <stock name="laurel">
+            <eqn>200000</eqn>
+            <inflow>laurel_regen</inflow>
+            <inflow>landslide_reg_0</inflow>
+            <outflow>Laur_inv_degree_1</outflow>
+            <outflow>landslide_0</outflow>
+            <non_negative />
+            <display x="440" y="449" color="blue" label_side="center" />
+        </stock>
+        <stock name="laur_cl">
+            <eqn>100000</eqn>
+            <inflow>Laur_inv_degree_1</inflow>
+            <inflow>landslide_reg_1</inflow>
+            <outflow>Laur_inv_degree_2</outflow>
+            <outflow>manag_laur_cl</outflow>
+            <outflow>landslide_1</outflow>
+            <non_negative />
+            <display x="630" y="455" color="blue" label_side="center" />
+        </stock>
+        <stock name="cl_laur">
+            <eqn>100000</eqn>
+            <inflow>Laur_inv_degree_2</inflow>
+            <inflow>landslide_reg_2</inflow>
+            <outflow>Laur_inv_degree_3</outflow>
+            <outflow>manag_cl_laur</outflow>
+            <outflow>landslide_2</outflow>
+            <non_negative />
+            <display x="830" y="447" color="blue" label_side="center" />
+        </stock>
+        <stock name="cl">
+            <eqn>100000</eqn>
+            <inflow>Laur_inv_degree_3</inflow>
+            <inflow>landslide_reg_3</inflow>
+            <outflow>manag_cl</outflow>
+            <outflow>landslide_3</outflow>
+            <non_negative />
+            <display x="1040" y="449" color="blue" label_side="center" />
+        </stock>
+        <flow name="Laur_inv_degree_1">
+            <eqn>rate_cl_invasion_1*laurel-landslide_0</eqn>
+            <non_negative />
+            <display x="535" y="444" color="blue">
+                <pts>
+                    <pt x="462" y="444" />
+                    <pt x="608" y="444" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="Laur_inv_degree_2">
+            <eqn>rate_cl_invasion_2*laur_cl-landslide_1</eqn>
+            <non_negative />
+            <display x="730" y="443" color="blue">
+                <pts>
+                    <pt x="652" y="443" />
+                    <pt x="808" y="443" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="Laur_inv_degree_3">
+            <eqn>rate_cl_invasion_3*cl_laur-landslide_2</eqn>
+            <non_negative />
+            <display x="935" y="447" color="blue">
+                <pts>
+                    <pt x="852" y="447" />
+                    <pt x="1018" y="447" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="rate_cl_invasion_1">
+            <eqn>0.001</eqn>
+            <display x="519" y="367" color="blue" />
+        </aux>
+        <aux name="rate_cl_invasion_2">
+            <eqn>0.002</eqn>
+            <display x="709" y="376" color="blue" />
+        </aux>
+        <aux name="rate_cl_invasion_3">
+            <eqn>0.004</eqn>
+            <display x="945" y="388" color="blue" />
+        </aux>
+        <flow name="manag_laur_cl">
+            <eqn>management*laur_cl</eqn>
+            <non_negative />
+            <display x="632" y="534" color="blue" label_angle="277">
+                <pts>
+                    <pt x="632" y="472" />
+                    <pt x="632" y="597" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="manag_cl_laur">
+            <eqn>management*cl_laur</eqn>
+            <non_negative />
+            <display x="826" y="529" color="blue" label_angle="277">
+                <pts>
+                    <pt x="826" y="464" />
+                    <pt x="826" y="595" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="manag_cl">
+            <eqn>management*cl</eqn>
+            <non_negative />
+            <display x="1042" y="528" color="blue" label_angle="277">
+                <pts>
+                    <pt x="1042" y="466" />
+                    <pt x="1042" y="590" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="laurel_regen">
+            <eqn>manag_laur_cl+manag_cl_laur+manag_cl</eqn>
+            <non_negative />
+            <display x="381" y="448" color="blue">
+                <pts>
+                    <pt x="345" y="448" />
+                    <pt x="418" y="448" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="landslide_3">
+            <eqn>IF landslide_occurrence &gt; 0 THEN landslide_occurrence*cl ELSE 0</eqn>
+            <non_negative />
+            <display x="1052" y="349" color="blue" label_side="top" label_angle="61">
+                <pts>
+                    <pt x="1052" y="432" />
+                    <pt x="1052" y="266" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="landslide_option">
+            <eqn>1</eqn>
+            <display x="1205" y="298" color="blue" />
+        </aux>
+        <flow name="landslide_2">
+            <eqn>IF landslide_occurrence &gt; 0 THEN landslide_occurrence*cl_laur ELSE 0</eqn>
+            <non_negative />
+            <display x="841" y="347" color="blue" label_side="top" label_angle="66">
+                <pts>
+                    <pt x="841" y="430" />
+                    <pt x="841" y="265" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="landslide_1">
+            <eqn>IF landslide_occurrence &gt; 0 THEN landslide_occurrence*laur_cl ELSE 0</eqn>
+            <non_negative />
+            <display x="647" y="345" color="blue" label_side="top" label_angle="76">
+                <pts>
+                    <pt x="647" y="438" />
+                    <pt x="647" y="253" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="landslide_0">
+            <eqn>IF landslide_occurrence &gt; 0 THEN landslide_occurrence*laurel ELSE 0</eqn>
+            <non_negative />
+            <display x="455" y="346" color="blue" label_side="top" label_angle="79">
+                <pts>
+                    <pt x="455" y="432" />
+                    <pt x="455" y="260" />
+                </pts>
+            </display>
+        </flow>
+        <stock name="LN_Priolo">
+            <eqn>0</eqn>
+            <inflow>gains</inflow>
+            <outflow>losses</outflow>
+            <outflow>adjust</outflow>
+            <non_negative />
+            <display x="1846" y="623" color="blue" />
+        </stock>
+        <flow name="gains">
+            <eqn>6.37E-01+(1.89E-07*laur_cl)+(1.29E-06*cl_laur)+(2.00E-06*laurel)  </eqn>
+            <non_negative />
+            <display x="1757" y="619" color="blue">
+                <pts>
+                    <pt x="1691" y="619" />
+                    <pt x="1824" y="619" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="losses">
+            <eqn>6.42E-08*cl+6.66E-06*landslides</eqn>
+            <non_negative />
+            <display x="1943" y="620" color="blue">
+                <pts>
+                    <pt x="1868" y="620" />
+                    <pt x="2018" y="620" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="Priolo">
+            <eqn>IF LN_Priolo=0 then 0 else EXP(LN_Priolo) </eqn>
+            <display x="1846" y="499" color="blue" />
+        </aux>
+        <flow name="adjust">
+            <eqn>LN_Priolo</eqn>
+            <non_negative />
+            <display x="1846" y="693" color="blue" label_angle="277">
+                <pts>
+                    <pt x="1846" y="640" />
+                    <pt x="1846" y="747" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="total_area">
+            <eqn>cl+cl_laur+laur_cl+laurel+landslides</eqn>
+            <display x="1257" y="1118" color="blue" />
+        </aux>
+        <aux name="landslide_occurrence">
+            <eqn>IF landslide_option = 1 AND landslide_probability = 10 THEN landslide_area ELSE 0</eqn>
+            <display x="1218" y="377" color="blue" />
+        </aux>
+        <aux name="timing_manag">
+            <eqn>5</eqn>
+            <display x="204" y="770" color="blue" />
+        </aux>
+        <aux name="manag_effort">
+            <eqn>1</eqn>
+            <display x="204" y="705" color="blue" />
+        </aux>
+        <aux name="laur_proportion">
+            <eqn>laurel/total_area</eqn>
+            <display x="521" y="1181" color="blue" />
+        </aux>
+        <aux name="laur_cl_proportion">
+            <eqn>laur_cl/total_area</eqn>
+            <display x="513" y="1370" color="blue" />
+        </aux>
+        <aux name="cl_laur_proportion">
+            <eqn>cl_laur/total_area</eqn>
+            <display x="801" y="1177" color="blue" />
+        </aux>
+        <aux name="cl_proportion">
+            <eqn>cl/total_area</eqn>
+            <display x="810" y="1379" color="blue" />
+        </aux>
+        <aux name="landslide_area">
+            <eqn>RANDOM(0,0.25)</eqn>
+            <display x="1330" y="336" color="blue" />
+        </aux>
+        <aux name="landslide_probability">
+            <eqn>ROUND(RANDOM(0,10))</eqn>
+            <display x="1328" y="460" color="blue" />
+        </aux>
+        <aux name="management_option">
+            <eqn>0</eqn>
+            <display x="271" y="805" color="blue" />
+        </aux>
+        <aux name="management">
+            <eqn>IF management_option = 1 AND TIME=timing_manag THEN manag_effort ELSE 0</eqn>
+            <display x="297" y="719" color="blue" />
+        </aux>
+        <flow name="landslide_reg_0">
+            <eqn>laur_landslide_reg</eqn>
+            <non_negative />
+            <display x="427" y="369" color="blue" label_angle="277">
+                <pts>
+                    <pt x="427" y="307" />
+                    <pt x="427" y="432" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="landslide_reg_1">
+            <eqn>laur_cl_landslide_reg</eqn>
+            <non_negative />
+            <display x="625" y="367" color="blue" label_angle="277">
+                <pts>
+                    <pt x="625" y="297" />
+                    <pt x="625" y="438" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="landslide_reg_2">
+            <eqn>cl_laur_landslides_reg</eqn>
+            <non_negative />
+            <display x="819" y="362" color="blue" label_angle="277">
+                <pts>
+                    <pt x="819" y="295" />
+                    <pt x="819" y="430" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="landslide_reg_3">
+            <eqn>cl_landslides_reg</eqn>
+            <non_negative />
+            <display x="1034" y="367" color="blue" label_angle="277">
+                <pts>
+                    <pt x="1034" y="302" />
+                    <pt x="1034" y="432" />
+                </pts>
+            </display>
+        </flow>
+        <stock name="landslides">
+            <eqn>0</eqn>
+            <inflow>landslides_gains</inflow>
+            <outflow>landslides_losses</outflow>
+            <non_negative />
+            <display x="766" y="850" color="blue" />
+        </stock>
+        <flow name="landslides_gains">
+            <eqn>landslide_0+landslide_1+landslide_2+landslide_3</eqn>
+            <non_negative />
+            <display x="663" y="843" color="blue">
+                <pts>
+                    <pt x="582" y="843" />
+                    <pt x="744" y="843" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="landslides_losses">
+            <eqn>laur_landslide_reg+laur_cl_landslide_reg+cl_laur_landslides_reg+cl_landslides_reg</eqn>
+            <non_negative />
+            <display x="851" y="838" color="blue">
+                <pts>
+                    <pt x="788" y="838" />
+                    <pt x="915" y="838" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="laur_landslide_reg">
+            <eqn>laur_proportion*landslides</eqn>
+            <display x="337" y="326" color="blue" />
+        </aux>
+        <aux name="laur_cl_landslide_reg">
+            <eqn>laur_cl_proportion*landslides</eqn>
+            <display x="555" y="328" color="blue" />
+        </aux>
+        <aux name="cl_laur_landslides_reg">
+            <eqn>cl_laur_proportion*landslides</eqn>
+            <display x="762" y="318" color="blue" />
+        </aux>
+        <aux name="cl_landslides_reg">
+            <eqn>cl_proportion*landslides</eqn>
+            <display x="970" y="332" color="blue" />
+        </aux>
+        <display page_width="559" page_height="783" page_cols="4" page_rows="2" isee:converter_size="medium" zoom="50" isee:animate_flows="true" isee:animate_stocks="true" isee:animate_converters="true" interval="DT" scroll_y="40">
+            <alias x="272" y="457" uid="0">
+                <of>manag_laur_cl</of>
+            </alias>
+            <alias x="485" y="886" uid="1">
+                <of>landslide_2</of>
+            </alias>
+            <alias x="1605" y="621" uid="2">
+                <of>laur_cl</of>
+            </alias>
+            <alias x="567" y="1302" uid="3">
+                <of>total_area</of>
+            </alias>
+            <alias x="862" y="1307" uid="4">
+                <of>total_area</of>
+            </alias>
+            <alias x="1126" y="1107" uid="5">
+                <of>cl_laur</of>
+            </alias>
+            <alias x="616" y="911" uid="6">
+                <of>landslide_3</of>
+            </alias>
+            <alias x="442" y="1311" uid="7">
+                <of>laur_cl</of>
+            </alias>
+            <alias x="545" y="219" uid="8">
+                <of>landslide_occurrence</of>
+            </alias>
+            <alias x="853" y="1099" uid="9">
+                <of>total_area</of>
+            </alias>
+            <alias x="754" y="1306" uid="10">
+                <of>cl</of>
+            </alias>
+            <alias x="924" y="904" uid="11">
+                <of>cl_landslides_reg</of>
+            </alias>
+            <alias x="749" y="537" uid="12">
+                <of>management</of>
+            </alias>
+            <alias x="1339" y="1057" uid="13">
+                <of>landslides</of>
+            </alias>
+            <alias x="974" y="548" uid="14">
+                <of>management</of>
+            </alias>
+            <alias x="799" y="760" uid="15">
+                <of>laur_landslide_reg</of>
+            </alias>
+            <alias x="919" y="757" uid="16">
+                <of>laur_cl_landslide_reg</of>
+            </alias>
+            <alias x="775" y="250" uid="17">
+                <of>landslides</of>
+            </alias>
+            <alias x="798" y="902" uid="18">
+                <of>cl_laur_landslides_reg</of>
+            </alias>
+            <alias x="585" y="278" uid="19">
+                <of>laur_cl_proportion</of>
+            </alias>
+            <alias x="924" y="308" uid="20">
+                <of>cl_proportion</of>
+            </alias>
+            <alias x="1717" y="532" uid="21">
+                <of>cl_laur</of>
+            </alias>
+            <alias x="708" y="279" uid="22">
+                <of>cl_laur_proportion</of>
+            </alias>
+            <alias x="1211" y="1035" uid="23">
+                <of>cl</of>
+            </alias>
+            <alias x="553" y="541" uid="24">
+                <of>management</of>
+            </alias>
+            <alias x="268" y="288" uid="25">
+                <of>laur_proportion</of>
+            </alias>
+            <alias x="949" y="238" uid="26">
+                <of>landslide_occurrence</of>
+            </alias>
+            <alias x="442" y="1108" uid="27">
+                <of>laurel</of>
+            </alias>
+            <alias x="1303" y="1237" uid="28">
+                <of>laurel</of>
+            </alias>
+            <alias x="360" y="539" uid="29">
+                <of>manag_cl</of>
+            </alias>
+            <alias x="1992" y="545" uid="30">
+                <of>cl</of>
+            </alias>
+            <alias x="737" y="1100" uid="31">
+                <of>cl_laur</of>
+            </alias>
+            <alias x="603" y="773" uid="32">
+                <of>landslide_0</of>
+            </alias>
+            <alias x="301" y="501" uid="33">
+                <of>manag_cl_laur</of>
+            </alias>
+            <alias x="512" y="757" uid="34">
+                <of>landslide_1</of>
+            </alias>
+            <alias x="579" y="1095" uid="35">
+                <of>total_area</of>
+            </alias>
+            <alias x="2009" y="681" uid="36">
+                <of>landslides</of>
+            </alias>
+            <alias x="1166" y="1206" uid="37">
+                <of>laur_cl</of>
+            </alias>
+            <alias x="1711" y="722" uid="38">
+                <of>laurel</of>
+            </alias>
+            <alias x="354" y="257" uid="39">
+                <of>landslides</of>
+            </alias>
+            <connector x="277" y="798" uid="40" color="#FF007F">
+                <from>management_option</from>
+                <to>management</to>
+            </connector>
+            <connector x="494" y="884" uid="41" color="#FF007F">
+                <from>
+                    <alias uid="1" />
+                </from>
+                <to>landslides_gains</to>
+            </connector>
+            <connector x="564" y="328" uid="42" color="#FF007F">
+                <from>laur_cl_landslide_reg</from>
+                <to>landslide_reg_1</to>
+            </connector>
+            <connector x="977" y="539" uid="43" color="#FF007F">
+                <from>
+                    <alias uid="14" />
+                </from>
+                <to>manag_cl</to>
+            </connector>
+            <connector x="567" y="1311" uid="44" color="#FF007F">
+                <from>
+                    <alias uid="3" />
+                </from>
+                <to>laur_cl_proportion</to>
+            </connector>
+            <connector x="917" y="898" uid="45" color="#FF007F">
+                <from>
+                    <alias uid="11" />
+                </from>
+                <to>landslides_losses</to>
+            </connector>
+            <connector x="912" y="762" uid="46" color="#FF007F">
+                <from>
+                    <alias uid="16" />
+                </from>
+                <to>landslides_losses</to>
+            </connector>
+            <connector x="554" y="223" uid="47" color="#FF007F">
+                <from>
+                    <alias uid="8" />
+                </from>
+                <to>landslide_1</to>
+            </connector>
+            <connector x="979" y="330" uid="48" color="#FF007F">
+                <from>cl_landslides_reg</from>
+                <to>landslide_reg_3</to>
+            </connector>
+            <connector x="1319" y="458" uid="49" color="#FF007F">
+                <from>landslide_probability</from>
+                <to>landslide_occurrence</to>
+            </connector>
+            <connector x="212" y="766" uid="50" color="#FF007F">
+                <from>timing_manag</from>
+                <to>management</to>
+            </connector>
+            <connector x="849" y="430" uid="51" color="#FF007F">
+                <from>cl_laur</from>
+                <to>Laur_inv_degree_3</to>
+            </connector>
+            <connector x="940" y="239" uid="52" color="#FF007F">
+                <from>
+                    <alias uid="26" />
+                </from>
+                <to>landslide_2</to>
+            </connector>
+            <connector x="1868" y="638" uid="53" color="#FF007F">
+                <from>LN_Priolo</from>
+                <to>adjust</to>
+            </connector>
+            <connector x="752" y="1323" uid="54" color="#FF007F">
+                <from>
+                    <alias uid="10" />
+                </from>
+                <to>cl_proportion</to>
+            </connector>
+            <connector x="755" y="530" uid="55" color="#FF007F">
+                <from>
+                    <alias uid="12" />
+                </from>
+                <to>manag_cl_laur</to>
+            </connector>
+            <connector x="959" y="242" uid="56" color="#FF007F">
+                <from>
+                    <alias uid="26" />
+                </from>
+                <to>landslide_3</to>
+            </connector>
+            <connector x="840" y="464" uid="57" color="#FF007F">
+                <from>cl_laur</from>
+                <to>manag_cl_laur</to>
+            </connector>
+            <connector x="462" y="436" uid="58" color="#FF007F">
+                <from>laurel</from>
+                <to>Laur_inv_degree_1</to>
+            </connector>
+            <connector x="519" y="376" uid="59" color="#FF007F">
+                <from>rate_cl_invasion_1</from>
+                <to>Laur_inv_degree_1</to>
+            </connector>
+            <connector x="363" y="531" uid="60" color="#FF007F">
+                <from>
+                    <alias uid="29" />
+                </from>
+                <to>laurel_regen</to>
+            </connector>
+            <connector x="579" y="1104" uid="61" color="#FF007F">
+                <from>
+                    <alias uid="35" />
+                </from>
+                <to>laur_proportion</to>
+            </connector>
+            <connector x="1330" y="345" uid="62" color="#FF007F">
+                <from>landslide_area</from>
+                <to>landslide_occurrence</to>
+            </connector>
+            <connector x="276" y="284" uid="63" color="#FF007F">
+                <from>
+                    <alias uid="25" />
+                </from>
+                <to>laur_landslide_reg</to>
+            </connector>
+            <connector x="1188" y="1192" uid="64" color="#FF007F">
+                <from>
+                    <alias uid="37" />
+                </from>
+                <to>total_area</to>
+            </connector>
+            <connector x="717" y="277" uid="65" color="#FF007F">
+                <from>
+                    <alias uid="22" />
+                </from>
+                <to>cl_laur_landslides_reg</to>
+            </connector>
+            <connector x="213" y="705" uid="66" color="#FF007F">
+                <from>manag_effort</from>
+                <to>management</to>
+            </connector>
+            <connector x="1316" y="1062" uid="67" color="#FF007F">
+                <from>
+                    <alias uid="13" />
+                </from>
+                <to>total_area</to>
+            </connector>
+            <connector x="621" y="903" uid="68" color="#FF007F">
+                <from>
+                    <alias uid="6" />
+                </from>
+                <to>landslides_gains</to>
+            </connector>
+            <connector x="577" y="275" uid="69" color="#FF007F">
+                <from>
+                    <alias uid="19" />
+                </from>
+                <to>laur_cl_landslide_reg</to>
+            </connector>
+            <connector x="1212" y="304" uid="70" color="#FF007F">
+                <from>landslide_option</from>
+                <to>landslide_occurrence</to>
+            </connector>
+            <connector x="309" y="497" uid="71" color="#FF007F">
+                <from>
+                    <alias uid="33" />
+                </from>
+                <to>laurel_regen</to>
+            </connector>
+            <connector x="942" y="397" uid="72" color="#FF007F">
+                <from>rate_cl_invasion_3</from>
+                <to>Laur_inv_degree_3</to>
+            </connector>
+            <connector x="446" y="1328" uid="73" color="#FF007F">
+                <from>
+                    <alias uid="7" />
+                </from>
+                <to>laur_cl_proportion</to>
+            </connector>
+            <connector x="275" y="448" uid="74" color="#FF007F">
+                <from>
+                    <alias uid="0" />
+                </from>
+                <to>laurel_regen</to>
+            </connector>
+            <connector x="641" y="472" uid="75" color="#FF007F">
+                <from>laur_cl</from>
+                <to>manag_laur_cl</to>
+            </connector>
+            <connector x="769" y="323" uid="76" color="#FF007F">
+                <from>cl_laur_landslides_reg</from>
+                <to>landslide_reg_2</to>
+            </connector>
+            <connector x="1296" y="1220" uid="77" color="#FF007F">
+                <from>
+                    <alias uid="28" />
+                </from>
+                <to>total_area</to>
+            </connector>
+            <connector x="1627" y="636" uid="78" color="#FF007F">
+                <from>
+                    <alias uid="2" />
+                </from>
+                <to>gains</to>
+            </connector>
+            <connector x="553" y="532" uid="79" color="#FF007F">
+                <from>
+                    <alias uid="24" />
+                </from>
+                <to>manag_laur_cl</to>
+            </connector>
+            <connector x="783" y="267" uid="80" color="#FF007F">
+                <from>
+                    <alias uid="17" />
+                </from>
+                <to>cl_laur_landslides_reg</to>
+            </connector>
+            <connector x="848" y="430" uid="81" color="#FF007F">
+                <from>cl_laur</from>
+                <to>landslide_2</to>
+            </connector>
+            <connector x="1987" y="683" uid="82" color="#FF007F">
+                <from>
+                    <alias uid="36" />
+                </from>
+                <to>losses</to>
+            </connector>
+            <connector x="732" y="1117" uid="83" color="#FF007F">
+                <from>
+                    <alias uid="31" />
+                </from>
+                <to>cl_laur_proportion</to>
+            </connector>
+            <connector x="447" y="1125" uid="84" color="#FF007F">
+                <from>
+                    <alias uid="27" />
+                </from>
+                <to>laur_proportion</to>
+            </connector>
+            <connector x="928" y="300" uid="85" color="#FF007F">
+                <from>
+                    <alias uid="20" />
+                </from>
+                <to>cl_landslides_reg</to>
+            </connector>
+            <connector x="1991" y="562" uid="86" color="#FF007F">
+                <from>
+                    <alias uid="30" />
+                </from>
+                <to>losses</to>
+            </connector>
+            <connector x="517" y="765" uid="87" color="#FF007F">
+                <from>
+                    <alias uid="34" />
+                </from>
+                <to>landslides_gains</to>
+            </connector>
+            <connector x="801" y="893" uid="88" color="#FF007F">
+                <from>
+                    <alias uid="18" />
+                </from>
+                <to>landslides_losses</to>
+            </connector>
+            <connector x="342" y="334" uid="89" color="#FF007F">
+                <from>laur_landslide_reg</from>
+                <to>landslide_reg_0</to>
+            </connector>
+            <connector x="608" y="780" uid="90" color="#FF007F">
+                <from>
+                    <alias uid="32" />
+                </from>
+                <to>landslides_gains</to>
+            </connector>
+            <connector x="363" y="274" uid="91" color="#FF007F">
+                <from>
+                    <alias uid="39" />
+                </from>
+                <to>laur_landslide_reg</to>
+            </connector>
+            <connector x="856" y="1107" uid="92" color="#FF007F">
+                <from>
+                    <alias uid="9" />
+                </from>
+                <to>cl_laur_proportion</to>
+            </connector>
+            <connector x="1062" y="456" uid="93" color="#FF007F">
+                <from>cl</from>
+                <to>manag_cl</to>
+            </connector>
+            <connector x="462" y="351" uid="94" color="#FF007F">
+                <from>landslide_0</from>
+                <to>Laur_inv_degree_1</to>
+            </connector>
+            <connector x="1058" y="432" uid="95" color="#FF007F">
+                <from>cl</from>
+                <to>landslide_3</to>
+            </connector>
+            <connector x="711" y="385" uid="96" color="#FF007F">
+                <from>rate_cl_invasion_2</from>
+                <to>Laur_inv_degree_2</to>
+            </connector>
+            <connector x="862" y="1316" uid="97" color="#FF007F">
+                <from>
+                    <alias uid="4" />
+                </from>
+                <to>cl_proportion</to>
+            </connector>
+            <connector x="377" y="244" uid="98" color="#FF007F">
+                <from>
+                    <alias uid="39" />
+                </from>
+                <to>laur_cl_landslide_reg</to>
+            </connector>
+            <connector x="1707" y="549" uid="99" color="#FF007F">
+                <from>
+                    <alias uid="21" />
+                </from>
+                <to>gains</to>
+            </connector>
+            <connector x="656" y="344" uid="100" color="#FF007F">
+                <from>landslide_1</from>
+                <to>Laur_inv_degree_2</to>
+            </connector>
+            <connector x="1148" y="1108" uid="101" color="#FF007F">
+                <from>
+                    <alias uid="5" />
+                </from>
+                <to>total_area</to>
+            </connector>
+            <connector x="851" y="348" uid="102" color="#FF007F">
+                <from>landslide_2</from>
+                <to>Laur_inv_degree_3</to>
+            </connector>
+            <connector x="653" y="439" uid="103" color="#FF007F">
+                <from>laur_cl</from>
+                <to>landslide_1</to>
+            </connector>
+            <connector x="1831" y="605" uid="104" color="#FF007F">
+                <from>LN_Priolo</from>
+                <to>Priolo</to>
+            </connector>
+            <connector x="462" y="432" uid="105" color="#FF007F">
+                <from>laurel</from>
+                <to>landslide_0</to>
+            </connector>
+            <connector x="535" y="221" uid="106" color="#FF007F">
+                <from>
+                    <alias uid="8" />
+                </from>
+                <to>landslide_0</to>
+            </connector>
+            <connector x="797" y="236" uid="107" color="#FF007F">
+                <from>
+                    <alias uid="17" />
+                </from>
+                <to>cl_landslides_reg</to>
+            </connector>
+            <connector x="1224" y="1052" uid="108" color="#FF007F">
+                <from>
+                    <alias uid="23" />
+                </from>
+                <to>total_area</to>
+            </connector>
+            <connector x="652" y="438" uid="109" color="#FF007F">
+                <from>laur_cl</from>
+                <to>Laur_inv_degree_2</to>
+            </connector>
+            <connector x="804" y="767" uid="110" color="#FF007F">
+                <from>
+                    <alias uid="15" />
+                </from>
+                <to>landslides_losses</to>
+            </connector>
+            <connector x="1733" y="709" uid="111" color="#FF007F">
+                <from>
+                    <alias uid="38" />
+                </from>
+                <to>gains</to>
+            </connector>
+            <stacked_container height="282" width="492" uid="112">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="true" isee:use_five_segments="false" date_time="2019-03-21T10:45:02Z" time_precision="2" from="0" to="50">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
+                        <scale min="500000" max="500000" />
+                        <entity name="total_area" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1306" y="775" width="26" height="22" color="#008F44" label_side="bottom" label="total area" type="graph" icon_of="112" />
+            <stacked_container height="282" width="492" uid="113">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="true" isee:use_five_segments="false" date_time="2019-03-21T10:45:02Z" time_precision="2" from="0" to="50">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
+                        <entity name="laurel" />
+                    </plot>
+                    <plot index="1" pen_width="1" color="red" precision="1" show_y_axis="true">
+                        <entity name="laur_cl" />
+                    </plot>
+                    <plot index="2" pen_width="1" color="fuchsia" precision="1" show_y_axis="true">
+                        <entity name="cl_laur" />
+                    </plot>
+                    <plot index="3" pen_width="1" color="#008F44" precision="1" show_y_axis="true">
+                        <entity name="cl" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1208" y="815" width="26" height="22" color="#008F44" label_side="bottom" label="natural veg" type="graph" icon_of="113" />
+            <stacked_container height="282" width="492" uid="114">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="true" isee:use_five_segments="false" date_time="2019-03-21T10:45:02Z" time_precision="2" from="1" to="50">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="max" show_y_axis="true">
+                        <entity name="Priolo" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1196" y="738" width="26" height="22" color="#008F44" label_side="bottom" label="Priolo" type="graph" icon_of="114" />
+            <stacked_container height="282" width="492" uid="115">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="true" isee:use_five_segments="false" date_time="2019-03-21T10:45:02Z" time_precision="2" from="0" to="50">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="max" show_y_axis="true">
+                        <entity name="landslide_occurrence" />
+                    </plot>
+                    <plot index="1" pen_width="1" color="red" precision="1" show_y_axis="true">
+                        <entity name="landslides" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1306" y="691" width="26" height="22" color="#008F44" label_side="bottom" label="landslides occurrence" type="graph" icon_of="115" />
+        </display>
+        <interface page_rows="2" page_width="788" page_height="528">
+            <simulation_delay>0.1</simulation_delay>
+            <switch x="163" y="284" uid="116" label_side="bottom" label_angle="225" color="black" width="32" height="60" switch_style="toggle" clicking_sound="true">
+                <entity name="landslide_option" value="1" />
+            </switch>
+            <switch x="178" y="448" uid="117" label_side="bottom" label_angle="225" color="black" width="32" height="60" switch_style="toggle" clicking_sound="true">
+                <entity name="management_option" value="0" />
+            </switch>
+            <knob x="182" y="120" color="black" width="83" height="91" min="0" max="500000">
+                <entity name="laurel" />
+            </knob>
+            <knob x="302" y="126" color="black" width="83" height="91" min="0" max="500000">
+                <entity name="laur_cl" />
+            </knob>
+            <knob x="426" y="120" color="black" width="83" height="91" min="0" max="500000">
+                <entity name="cl_laur" />
+            </knob>
+            <knob x="546" y="119" color="black" width="83" height="91" min="0" max="500000">
+                <entity name="cl" />
+            </knob>
+            <knob x="322" y="481" color="black" width="83" height="91" min="1" max="50">
+                <entity name="timing_manag" />
+            </knob>
+            <knob x="447" y="482" color="black" width="83" height="91" min="0" max="1">
+                <entity name="manag_effort" value="0.5" />
+            </knob>
+        </interface>
+        <popup x="547" y="246" content="112" />
+        <popup x="407" y="248" content="113" />
+        <popup x="561" y="261" content="114" />
+        <popup x="573" y="356" content="115" />
+    </model>
+</xmile>
